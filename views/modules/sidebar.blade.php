@@ -8,10 +8,6 @@
         </div>
         <div class="w-full h-0.5 bg-gray-500"></div>
         <a class="flex items-center w-full p-3 font-semibold duration-75 transform hover:bg-blue-500" href="/">
-            <i class="mr-3 fas fa-layer-group"></i>
-            Statistiques
-        </a>
-        <a class="flex items-center w-full p-3 font-semibold duration-75 transform hover:bg-blue-500" href="/calendrier">
             <i class="mr-3 fas fa-calendar-alt"></i>
             Calendrier
         </a>

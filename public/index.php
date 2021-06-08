@@ -74,20 +74,11 @@ function exportCsv()
 }
 
 $router = new Router();
-$router->get('/', function () {
-    $con = initDB();
-    $totale = $con->runRawQuery('SELECT count(1) from visites');
-    $validee = $con->runRawQuery('SELECT count(1) from visites where statut="validée"');
-    $expiree = $con->runRawQuery('SELECT count(1) from visites where statut="expirée"');
-    $attente = $con->runRawQuery('SELECT count(1) from visites where statut="en attente"');
-
-    render('statistiques', ['titre' => 'Statistiques • ', 'app' => $_ENV['APP_NAME'], 'totale' => $totale, 'validee' => $validee, 'attente' => $attente, 'expiree' => $expiree]); // [] = array()
-});
 $router->get('/recherche', function () {
     $con = initDB();
 
     $res = $_GET["res"];
-    $visites = $con->runRawQuery('SELECT * from visites');
+    $visites = $con->runRawQuery('SELECT * FROM visites');
 
     //lookup all links from the xml file if length of q>0
     if (strlen($res) > 0) {
@@ -118,15 +109,23 @@ $router->get('/recherche', function () {
     // Retourner la réponse
     echo $reponse;
 });
-$router->get('/calendrier', function () {
+$router->get('/', function () {
     $con = initDB();
+    $totale = $con->runRawQuery('SELECT count(1) FROM visites');
+    $validee = $con->runRawQuery('SELECT count(1) FROM visites WHERE statut="validée"');
+    $expiree = $con->runRawQuery('SELECT count(1) FROM visites WHERE statut="expirée"');
+    $attente = $con->runRawQuery('SELECT count(1) FROM visites WHERE statut="en attente"');
+    $nb_visite = $totale[0]['count(1)'];
+    $percent_validee = ($validee[0]['count(1)'] / $nb_visite) * 100;
+    $percent_expiree = ($expiree[0]['count(1)'] / $nb_visite) * 100;
+    $percent_attente = ($attente[0]['count(1)'] / $nb_visite) * 100;
 
-    render('calendrier', ['titre' => 'Calendrier • ', 'app' => $_ENV['APP_NAME']]); // [] = array()
+    render('calendrier', ['titre' => 'Calendrier • ', 'app' => $_ENV['APP_NAME'], 'totale' => $totale, 'validee' => $validee, 'attente' => $attente, 'expiree' => $expiree, 'percent_validee' => $percent_validee, 'percent_expiree' => $percent_expiree, 'percent_attente' => $percent_attente]); // [] = array()
 });
 $router->get('/enregistrement', function () {
     $con = initDB();
 
-    $motifs = $con->runRawQuery('SELECT nom from motifs');
+    $motifs = $con->runRawQuery('SELECT nom FROM motifs');
 
     render('creation-visite', ['titre' => 'Création d\'une visite • ', 'app' => $_ENV['APP_NAME'], 'motifs' => $motifs]); // [] = array()
 });
@@ -134,30 +133,30 @@ $router->get('/enregistrement', function () {
 $router->get('/visites-expirees', function () {
     $con = initDB();
 
-    $identifiants = $con->runRawQuery('SELECT * from identifiants');
-    $statuts = $con->runRawQuery('SELECT * from statuts');
-    $motifs = $con->runRawQuery('SELECT * from motifs');
-    $visites = $con->runRawQuery('SELECT * from visites WHERE statut = "expirée" ORDER BY nom');
+    $identifiants = $con->runRawQuery('SELECT * FROM identifiants');
+    $statuts = $con->runRawQuery('SELECT * FROM statuts');
+    $motifs = $con->runRawQuery('SELECT * FROM motifs');
+    $visites = $con->runRawQuery('SELECT * FROM visites WHERE statut = "expirée" ORDER BY nom');
 
     render('tableaux-visites.expire', ['titre' => 'Visites expirées • ', 'app' => $_ENV['APP_NAME'], 'visites' => $visites, 'statuts' => $statuts, 'motifs' => $motifs, 'identifiants'=>$identifiants]); // [] = array()
 });
 $router->get('/visites-en-attente', function () {
     $con = initDB();
 
-    $identifiants = $con->runRawQuery('SELECT * from identifiants');
-    $statuts = $con->runRawQuery('SELECT * from statuts');
-    $motifs = $con->runRawQuery('SELECT * from motifs');
-    $visites = $con->runRawQuery('SELECT * from visites WHERE statut = "en attente" ORDER BY nom');
+    $identifiants = $con->runRawQuery('SELECT * FROM identifiants');
+    $statuts = $con->runRawQuery('SELECT * FROM statuts');
+    $motifs = $con->runRawQuery('SELECT * FROM motifs');
+    $visites = $con->runRawQuery('SELECT * FROM visites WHERE statut = "en attente" ORDER BY nom');
 
     render('tableaux-visites.en-attente', ['titre' => 'Visites en attente • ', 'app' => $_ENV['APP_NAME'], 'visites' => $visites, 'statuts' => $statuts, 'motifs' => $motifs, 'identifiants'=>$identifiants]); // [] = array()
 });
 $router->get('/visites-validees', function () {
     $con = initDB();
 
-    $identifiants = $con->runRawQuery('SELECT * from identifiants');
-    $statuts = $con->runRawQuery('SELECT * from statuts');
-    $motifs = $con->runRawQuery('SELECT * from motifs');
-    $visites = $con->runRawQuery('SELECT * from visites WHERE statut = "validée" ORDER BY nom');
+    $identifiants = $con->runRawQuery('SELECT * FROM identifiants');
+    $statuts = $con->runRawQuery('SELECT * FROM statuts');
+    $motifs = $con->runRawQuery('SELECT * FROM motifs');
+    $visites = $con->runRawQuery('SELECT * FROM visites WHERE statut = "validée" ORDER BY nom');
 
     render('tableaux-visites.valide', ['titre' => 'Visites validées • ', 'app' => $_ENV['APP_NAME'], 'visites' => $visites, 'statuts' => $statuts, 'motifs' => $motifs, 'identifiants'=>$identifiants]); // [] = array()
 });
@@ -228,7 +227,7 @@ $router->post('/visites-en-attente', function () {
         $statut = $_POST['statut'];
         $id = $_POST['id'];
 
-        $type_id = $con->runRawQuery('SELECT type_id from visites WHERE id = :id', ['id' => $id]);
+        $type_id = $con->runRawQuery('SELECT type_id FROM visites WHERE id = :id', ['id' => $id]);
 
         foreach ($type_id[0] as $test) {
             if ($test == null) {

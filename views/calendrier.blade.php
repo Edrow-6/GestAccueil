@@ -8,8 +8,7 @@
         <div class="xl:flex">
             @include('modules.sidebar')
             <div class="w-full">
-                @include('modules.navbar')
-                {{-- DIV EN DEV DE LA BARRE DE RECHERCHE --}}
+                @include('modules.navbar') {{-- DIV EN DEV DE LA BARRE DE RECHERCHE --}}
                 <div id="recherche"></div>
                 <style>
                     [x-cloak] {
@@ -40,121 +39,190 @@
                             </button>
                         </div>
                     </div>
-                    <div>
-                        <div>
-                            <div class="container px-4 py-2 mx-auto">
-                                <div class="my-6 overflow-hidden bg-white rounded shadow">
-                                    <div class="flex items-center justify-between px-6 py-2 mb-1 text-gray-600 uppercase bg-gray-300">
-                                        <div>
-                                            <span x-text="NOM_MOIS[mois]" class="text-lg font-bold text-gray-600"></span>
-                                            <span x-text="annee" class="ml-1 text-lg font-normal text-gray-500"></span>
-                                        </div>
-                                    </div>
+                    <div class="px-4 pt-8">
+                        <div class="grid grid-cols-4 gap-4">
+                            <a href="/visites-expirees" class="flex flex-col justify-center px-4 py-4 mt-4 duration-100 transform bg-white border-2 border-gray-300 shadow-sm rounded-xl sm:mt-0 hover:shadow-lg hover:scale-105">
+                                <div>
+                                    <p class="absolute items-center">
+                                        <i class="text-3xl text-gray-500 opacity-50 fas fa-times-circle"></i>
+                                    </p>
+                                    <p class="flex items-center justify-end text-gray-500 text-md">
+                                        <span class="font-bold">
+                                            {{ round($percent_expiree, 2) }}%
+                                        </span>
+                                    </p>
+                                </div>
+                                <p class="text-3xl font-semibold text-center text-gray-800">{{ $expiree[0]['count(1)'] }}</p>
+                                <p class="text-lg text-center text-gray-500">Visites expirées</p>
+                            </a>
 
-                                    <div class="-mx-1 -mb-1">
-                                        <div class="flex flex-wrap" style="margin-bottom: -40px;">
-                                            <template x-for="(jour, index) in JOURS" :key="index">
-                                                <div style="width: 14.26%;" class="px-2 py-2">
-                                                    <div x-text="jour" class="text-sm font-bold tracking-wide text-center text-gray-600 uppercase"></div>
-                                                </div>
-                                            </template>
-                                        </div>
+                            <a href="/visites-en-attente" class="flex flex-col justify-center px-4 py-4 mt-4 duration-100 transform bg-white border-2 border-gray-300 shadow-sm rounded-xl sm:mt-0 hover:shadow-lg hover:scale-105">
+                                <div>
+                                    <p class="absolute items-center">
+                                        <i class="text-3xl text-yellow-500 opacity-50 fas fa-clock"></i>
+                                    </p>
+                                    <p class="flex items-center justify-end text-yellow-500 text-md">
+                                        <span class="font-bold">
+                                            {{ round($percent_attente, 2) }}%
+                                        </span>
+                                    </p>
+                                </div>
+                                <p class="text-3xl font-semibold text-center text-gray-800">{{ $attente[0]['count(1)'] }}</p>
+                                <p class="text-lg text-center text-gray-500">Visites en attente</p>
+                            </a>
 
-                                        <div class="flex flex-wrap border-t border-l">
-                                            <template x-for="jour_vide in jours_vides">
-                                                <div style="width: 14.28%; height: 120px;" class="px-4 pt-2 text-center border-b border-r"></div>
-                                            </template>
-                                            <template x-for="(date, dateIndex) in num_de_jours" :key="dateIndex">
-                                                <div style="width: 14.28%; height: 120px;" class="relative px-4 pt-2 border-b border-r">
+                            <a href="/visites-validees" class="flex flex-col justify-center px-4 py-4 mt-4 duration-100 transform bg-white border-2 border-gray-300 shadow-sm rounded-xl sm:mt-0 hover:shadow-lg hover:scale-105">
+                                <div>
+                                    <p class="absolute items-center">
+                                        <i class="text-3xl text-green-500 opacity-50 fas fa-check-circle"></i>
+                                    </p>
+                                    <p class="flex items-center justify-end text-green-500 text-md">
+                                        <span class="font-bold">
+                                            {{ round($percent_validee, 2) }}%
+                                        </span>
+                                    </p>
+                                </div>
+                                <p class="text-3xl font-semibold text-center text-gray-800">{{ $validee[0]['count(1)'] }}</p>
+                                <p class="text-lg text-center text-gray-500">Visites validées</p>
+                            </a>
+
+                            <div class="flex flex-col justify-center px-4 py-4 mt-4 duration-100 transform bg-white border-2 border-gray-300 shadow-sm select-none rounded-xl sm:mt-0 hover:shadow-lg">
+                                <div>
+                                    <p class="absolute items-center">
+                                        <i class="text-3xl text-blue-500 opacity-50 fas fa-globe-europe"></i>
+                                    </p>
+                                    <p class="flex items-center justify-end text-blue-500 text-md">
+                                        <span class="font-bold">100%</span>
+                                    </p>
+                                </div>
+                                <p class="text-3xl font-semibold text-center text-gray-800">{{ $totale[0]['count(1)'] }}</p>
+                                <p class="text-lg text-center text-gray-500">Visites totales</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="container px-4 mx-auto">
+                        <div class="my-3 overflow-hidden bg-white rounded shadow">
+                            <div class="flex items-center justify-between px-6 py-2 mb-1 text-gray-600 uppercase bg-gray-300">
+                                <div>
+                                    <span x-text="NOM_MOIS[mois]" class="text-lg font-bold text-gray-600"></span>
+                                    <span x-text="annee" class="ml-1 text-lg font-normal text-gray-500"></span>
+                                </div>
+                            </div>
+
+                            <div class="-mx-1 -mb-1">
+                                <div class="flex flex-wrap" style="margin-bottom: -40px;">
+                                    <template x-for="(jour, index) in JOURS" :key="index">
+                                        <div style="width: 14.26%;" class="px-2 py-2">
+                                            <div x-text="jour" class="text-sm font-bold tracking-wide text-center text-gray-600 uppercase"></div>
+                                        </div>
+                                    </template>
+                                </div>
+
+                                <div class="flex flex-wrap border-t border-l">
+                                    <template x-for="jour_vide in jours_vides">
+                                        <div style="width: 14.28%; height: 120px;" class="px-4 pt-2 text-center border-b border-r"></div>
+                                    </template>
+                                    <template x-for="(date, dateIndex) in num_de_jours" :key="dateIndex">
+                                        <div style="width: 14.28%; height: 120px;" class="relative px-4 pt-2 border-b border-r">
+                                            <div
+                                                @click="showEventModal(date)"
+                                                x-text="date"
+                                                class="inline-flex items-center justify-center w-6 h-6 leading-none text-center transition duration-100 ease-in-out rounded-full cursor-pointer"
+                                                :class="{'bg-blue-500 text-white': isToday(date) == true, 'text-gray-700 hover:bg-blue-200': isToday(date) == false }"
+                                            ></div>
+                                            <div style="height: 80px;" class="mt-1 overflow-y-auto">
+                                                <div
+                                                    class="absolute top-0 right-0 inline-flex items-center justify-center w-6 h-6 mt-2 mr-2 text-sm leading-none text-white bg-gray-700 rounded-full"
+                                                    x-show="events.filter(e => e.date_evenement === new Date(annee, mois, date).toDateString()).length"
+                                                    x-text="events.filter(e => e.date_evenement === new Date(annee, mois, date).toDateString()).length"
+                                                ></div>
+
+                                                <template x-for="event in events.filter(e => new Date(e.date_evenement).toDateString() ===  new Date(annee, mois, date).toDateString() )">
                                                     <div
-                                                        @click="showEventModal(date)"
-                                                        x-text="date"
-                                                        class="inline-flex items-center justify-center w-6 h-6 leading-none text-center transition duration-100 ease-in-out rounded-full cursor-pointer"
-                                                        :class="{'bg-blue-500 text-white': isToday(date) == true, 'text-gray-700 hover:bg-blue-200': isToday(date) == false }"
-                                                    ></div>
-                                                    <div style="height: 80px;" class="mt-1 overflow-y-auto">
-                                                        <div
-                                                            class="absolute top-0 right-0 inline-flex items-center justify-center w-6 h-6 mt-2 mr-2 text-sm leading-none text-white bg-gray-700 rounded-full"
-                                                            x-show="events.filter(e => e.date_evenement === new Date(annee, mois, date).toDateString()).length"
-                                                            x-text="events.filter(e => e.date_evenement === new Date(annee, mois, date).toDateString()).length"
-                                                        ></div>
-
-                                                        <template x-for="event in events.filter(e => new Date(e.date_evenement).toDateString() ===  new Date(annee, mois, date).toDateString() )">
-                                                            <div
-                                                                class="px-2 py-1 mt-1 overflow-hidden border rounded-lg"
-                                                                :class="{
+                                                        class="px-2 py-1 mt-1 overflow-hidden border rounded-lg"
+                                                        :class="{
                                                                     'border-blue-200 text-blue-800 bg-blue-100': event.theme_evenement === 'blue',
                                                                     'border-red-200 text-red-800 bg-red-100': event.theme_evenement === 'red',
                                                                     'border-yellow-200 text-yellow-800 bg-yellow-100': event.theme_evenement === 'yellow',
                                                                     'border-green-200 text-green-800 bg-green-100': event.theme_evenement === 'green',
                                                                     'border-purple-200 text-purple-800 bg-purple-100': event.theme_evenement === 'purple'
                                                                 }"
-                                                            >
-                                                                <p x-text="event.titre_evenement" class="text-sm leading-tight truncate"></p>
-                                                            </div>
-                                                        </template>
+                                                    >
+                                                        <p x-text="event.titre_evenement" class="text-sm leading-tight truncate"></p>
                                                     </div>
-                                                </div>
-                                            </template>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Modal -->
-                            <div style=" background-color: rgba(0, 0, 0, 0.8)" class="fixed top-0 bottom-0 left-0 right-0 z-40 w-full h-full" x-show.transition.opacity="ouvrirModalEvenement">
-                                <div class="relative left-0 right-0 max-w-xl p-4 mx-auto mt-24 overflow-hidden">
-                                    <div class="absolute top-0 right-0 inline-flex items-center justify-center w-10 h-10 text-gray-500 bg-white rounded-full shadow cursor-pointer hover:text-gray-800"
-                                        x-on:click="ouvrirModalEvenement = !ouvrirModalEvenement">
-                                        <svg class="w-6 h-6 fill-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                                            <path
-                                                d="M16.192 6.344L11.949 10.586 7.707 6.344 6.293 7.758 10.535 12 6.293 16.242 7.707 17.656 11.949 13.414 16.192 17.656 17.606 16.242 13.364 12 17.606 7.758z" />
-                                        </svg>
-                                    </div>
-                    
-                                    <div class="block w-full p-8 overflow-hidden bg-white rounded-lg shadow">
-                                        
-                                        <h2 class="pb-2 mb-6 text-2xl font-bold text-gray-800 border-b">Ajouter détails évenement (dev)</h2>
-                                     
-                                        <div class="mb-4">
-                                            <label class="block mb-1 text-sm font-bold tracking-wide text-gray-800">Titre</label>
-                                            <input class="w-full px-4 py-2 leading-tight text-gray-700 bg-gray-200 border-2 border-gray-200 rounded-lg appearance-none focus:outline-none focus:bg-white focus:border-blue-500" type="text" x-model="titre_evenement">
-                                        </div>
-                    
-                                        <div class="mb-4">
-                                            <label class="block mb-1 text-sm font-bold tracking-wide text-gray-800">Date</label>
-                                            <input class="w-full px-4 py-2 leading-tight text-gray-700 bg-gray-200 border-2 border-gray-200 rounded-lg appearance-none focus:outline-none focus:bg-white focus:border-blue-500" type="text" x-model="date_evenement" readonly>
-                                        </div>
-                    
-                                        <div class="inline-block w-64 mb-4">
-                                            <label class="block mb-1 text-sm font-bold tracking-wide text-gray-800">Thème</label>
-                                            <div class="relative">
-                                                <select @change="theme_evenement = $event.target.value;" x-model="theme_evenement" class="block w-full px-4 py-2 pr-8 leading-tight text-gray-700 bg-gray-200 border-2 border-gray-200 rounded-lg appearance-none hover:border-gray-500 focus:outline-none focus:bg-white focus:border-blue-500">
-                                                        <template x-for="(theme, index) in themes">
-                                                            <option :value="theme.value" x-text="theme.label"></option>
-                                                        </template>
-                                                    
-                                                </select>
-                                                <div class="absolute inset-y-0 right-0 flex items-center px-2 text-gray-700 pointer-events-none">
-                                                <svg class="w-4 h-4 fill-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
-                                                </div>
+                                                </template>
                                             </div>
                                         </div>
-                     
-                                        <div class="mt-8 text-right">
-                                            <button type="button" class="px-4 py-2 mr-2 font-semibold text-gray-700 bg-white border border-gray-300 rounded-lg shadow-sm hover:bg-gray-100" @click="ouvrirModalEvenement = !ouvrirModalEvenement">
-                                                Annuler
-                                            </button>	
-                                            <button type="button" class="px-4 py-2 font-semibold text-white bg-gray-800 border border-gray-700 rounded-lg shadow-sm hover:bg-gray-700" @click="addEvent()">
-                                                Enregistrer
-                                            </button>	
+                                    </template>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Modal -->
+                    <div style="background-color: rgba(0, 0, 0, 0.8);" class="fixed top-0 bottom-0 left-0 right-0 z-40 w-full h-full" x-show.transition.opacity="ouvrirModalEvenement">
+                        <div class="relative left-0 right-0 max-w-xl p-4 mx-auto mt-24 overflow-hidden">
+                            <div
+                                class="absolute top-0 right-0 inline-flex items-center justify-center w-10 h-10 text-gray-500 bg-white rounded-full shadow cursor-pointer hover:text-gray-800"
+                                x-on:click="ouvrirModalEvenement = !ouvrirModalEvenement"
+                            >
+                                <svg class="w-6 h-6 fill-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                                    <path d="M16.192 6.344L11.949 10.586 7.707 6.344 6.293 7.758 10.535 12 6.293 16.242 7.707 17.656 11.949 13.414 16.192 17.656 17.606 16.242 13.364 12 17.606 7.758z" />
+                                </svg>
+                            </div>
+
+                            <div class="block w-full p-8 overflow-hidden bg-white rounded-lg shadow">
+                                <h2 class="pb-2 mb-6 text-2xl font-bold text-gray-800 border-b">Ajouter détails évenement (dev)</h2>
+
+                                <div class="mb-4">
+                                    <label class="block mb-1 text-sm font-bold tracking-wide text-gray-800">Titre</label>
+                                    <input
+                                        class="w-full px-4 py-2 leading-tight text-gray-700 bg-gray-200 border-2 border-gray-200 rounded-lg appearance-none focus:outline-none focus:bg-white focus:border-blue-500"
+                                        type="text"
+                                        x-model="titre_evenement"
+                                    />
+                                </div>
+
+                                <div class="mb-4">
+                                    <label class="block mb-1 text-sm font-bold tracking-wide text-gray-800">Date</label>
+                                    <input
+                                        class="w-full px-4 py-2 leading-tight text-gray-700 bg-gray-200 border-2 border-gray-200 rounded-lg appearance-none focus:outline-none focus:bg-white focus:border-blue-500"
+                                        type="text"
+                                        x-model="date_evenement"
+                                        readonly
+                                    />
+                                </div>
+
+                                <div class="inline-block w-64 mb-4">
+                                    <label class="block mb-1 text-sm font-bold tracking-wide text-gray-800">Thème</label>
+                                    <div class="relative">
+                                        <select
+                                            @change="theme_evenement = $event.target.value;"
+                                            x-model="theme_evenement"
+                                            class="block w-full px-4 py-2 pr-8 leading-tight text-gray-700 bg-gray-200 border-2 border-gray-200 rounded-lg appearance-none hover:border-gray-500 focus:outline-none focus:bg-white focus:border-blue-500"
+                                        >
+                                            <template x-for="(theme, index) in themes">
+                                                <option :value="theme.value" x-text="theme.label"></option>
+                                            </template>
+                                        </select>
+                                        <div class="absolute inset-y-0 right-0 flex items-center px-2 text-gray-700 pointer-events-none">
+                                            <svg class="w-4 h-4 fill-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" /></svg>
                                         </div>
                                     </div>
                                 </div>
+
+                                <div class="mt-8 text-right">
+                                    <button type="button" class="px-4 py-2 mr-2 font-semibold text-gray-700 bg-white border border-gray-300 rounded-lg shadow-sm hover:bg-gray-100" @click="ouvrirModalEvenement = !ouvrirModalEvenement">
+                                        Annuler
+                                    </button>
+                                    <button type="button" class="px-4 py-2 font-semibold text-white bg-gray-800 border border-gray-700 rounded-lg shadow-sm hover:bg-gray-700" @click="addEvent()">
+                                        Enregistrer
+                                    </button>
+                                </div>
                             </div>
-                            <!-- /Modal -->
                         </div>
                     </div>
+                    <!-- /Modal -->
 
                     <script>
                         const NOM_MOIS = ["Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"];
