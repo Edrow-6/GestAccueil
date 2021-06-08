@@ -1,0 +1,20 @@
+{
+  "devDependencies": {
+    "autoprefixer": "^10.2.5",
+    "postcss": "^8.2.15",
+    "postcss-cli": "^8.3.1",
+    "tailwindcss": "^2.1.2"
+  },
+  "name": "GestAccueil",
+  "description": "Projet CPAM Gestion Accueil",
+  "version": "1.0.0",
+  "main": "none",
+  "scripts": {
+    "compile": "postcss public/css/styles.css -o public/css/compiled.css"
+  },
+  "author": "Cédric Dnst",
+  "license": "MIT",
+  "dependencies": {
+    "@tailwindcss/forms": "^0.3.2"
+  }
+}
