@@ -120,7 +120,10 @@ $router->get('/', function () {
     $percent_expiree = ($expiree[0]['count(1)'] / $nb_visite) * 100;
     $percent_attente = ($attente[0]['count(1)'] / $nb_visite) * 100;
 
-    render('calendrier', ['titre' => 'Calendrier • ', 'app' => $_ENV['APP_NAME'], 'totale' => $totale, 'validee' => $validee, 'attente' => $attente, 'expiree' => $expiree, 'percent_validee' => $percent_validee, 'percent_expiree' => $percent_expiree, 'percent_attente' => $percent_attente]); // [] = array()
+    include 'Calendrier.php';
+    $calendrier = new Calendrier();
+
+    render('calendrier', ['titre' => 'Calendrier • ', 'app' => $_ENV['APP_NAME'], 'totale' => $totale, 'validee' => $validee, 'attente' => $attente, 'expiree' => $expiree, 'percent_validee' => $percent_validee, 'percent_expiree' => $percent_expiree, 'percent_attente' => $percent_attente, 'calendrier' => $calendrier]); // [] = array()
 });
 $router->get('/enregistrement', function () {
     $con = initDB();
