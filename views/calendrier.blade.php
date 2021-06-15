@@ -88,12 +88,6 @@
                                 <p class="text-lg text-center text-gray-500">Visites totales</p>
                             </div>
                         </div>
-                        <?php
-                        $calendrier->add_visite('Test1', '10-06-2021', 1, 'green');
-                        $calendrier->add_visite('Test2', '16-06-2021', 1, 'red');
-                        $calendrier->add_visite('Test3', '20-06-2021', 7, 'gray');
-                        $calendrier->add_visite('Test3', '09-07-2021', 3, 'yellow');
-                        ?>
                         <?= $calendrier ?>
                     </div>
                 </main>

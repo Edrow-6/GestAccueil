@@ -122,6 +122,11 @@ $router->get('/', function () {
 
     include 'Calendrier.php';
     $calendrier = new Calendrier();
+    $visites = $con->runRawQuery('SELECT * FROM visites');
+    $statuts = $con->runRawQuery('SELECT * FROM statuts');
+    foreach ($visites as $visite) {
+        $calendrier->add_visite($visite['nom'] . " " . $visite['prenom'], $visite['date_arrivee'], 1, 'green');
+    }
 
     render('calendrier', ['titre' => 'Calendrier • ', 'app' => $_ENV['APP_NAME'], 'totale' => $totale, 'validee' => $validee, 'attente' => $attente, 'expiree' => $expiree, 'percent_validee' => $percent_validee, 'percent_expiree' => $percent_expiree, 'percent_attente' => $percent_attente, 'calendrier' => $calendrier]); // [] = array()
 });
