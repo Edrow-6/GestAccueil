@@ -13,6 +13,10 @@
             name="search"
             onkeyup="showResult(this.value)"
         />
+        {{-- DIV EN DEV DE LA BARRE DE RECHERCHE --}}
+        <div class="absolute text-center rounded-lg shadow-lg bg-gray-50 mt-11 w-60">
+            <div class="py-2" id="recherche"></div>
+        </div>
     </div>
     <div class="flex ml-auto">
         <form method="POST">

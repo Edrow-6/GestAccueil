@@ -9,8 +9,6 @@
             @include('modules.sidebar')
             <div class="w-full">
                 @include('modules.navbar')
-                {{-- DIV EN DEV DE LA BARRE DE RECHERCHE --}}
-                <div id="recherche"></div>
                 <main class="grid gap-4 px-4 md:grid-cols-1 lg:grid-cols-1">
                     <div class="relative">
                         <div class="absolute px-10 py-5 -mt-10 transform -translate-x-1/2 bg-blue-100 rounded-lg shadow-lg top-1/2 left-1/2">

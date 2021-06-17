@@ -219,9 +219,7 @@
                 />
                 @endif
             </form>
-        
         </div>
-
             <div class="mt-8 text-right">
                 <button type="button" class="px-4 py-2 mr-2 font-semibold text-gray-700 bg-white border border-gray-300 rounded-lg shadow-sm hover:bg-gray-100" @click="openIdModal = !openIdModal">
                     Annuler
@@ -230,6 +228,7 @@
                     Valider
                 </button>
             </div>
+        
         </div>
     </div>
 </div>
@@ -265,18 +264,17 @@
                     type="number"
                     name="num_id"
                 />
-            </form>
-        
-        </div>
-
-            <div class="mt-8 text-right">
-                <button type="button" class="px-4 py-2 mr-2 font-semibold text-gray-700 bg-white border border-gray-300 rounded-lg shadow-sm hover:bg-gray-100" @click="openValidIdModal = !openValidIdModal">
-                    Annuler
-                </button>
-                <button type="submit" form="identity" class="px-4 py-2 font-semibold text-white bg-green-500 border border-green-400 rounded-lg shadow-sm hover:bg-green-400">
-                    Valider
-                </button>
+                </form>
             </div>
+                <div class="mt-8 text-right">
+                    <button type="button" class="px-4 py-2 mr-2 font-semibold text-gray-700 bg-white border border-gray-300 rounded-lg shadow-sm hover:bg-gray-100" @click="openValidIdModal = !openValidIdModal">
+                        Annuler
+                    </button>
+                    <button type="submit" form="identity" class="px-4 py-2 font-semibold text-white bg-green-500 border border-green-400 rounded-lg shadow-sm hover:bg-green-400">
+                        Valider
+                    </button>
+                </div>
+            
         </div>
     </div>
 </div>

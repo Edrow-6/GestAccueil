@@ -85,14 +85,24 @@ $router->get('/recherche', function () {
         $resultat = "";
         foreach ($visites as $visite) {
             $show = $visite['nom'] . " " . $visite['prenom'];
-            $url = $visite['nom'];
+            switch ($visite['statut']) {
+                case "expirée":
+                    $url = "visites-expirees";
+                    break;
+                case "en attente":
+                    $url = "visites-en-attente";
+                    break;
+                case "validée":
+                    $url = "visites-validees";
+                    break;
+            }
             if (isset($show)) {
                 // Trouver une correspondance avec la recherche
                 if (stristr($show, $res)) {
                     if ($resultat == "") {
                         $resultat = '<a href="' . $url . '" target="_blank">' . $show . '</a>';
                     } else {
-                        $resultat = $resultat . '<br /><a href="' . $url . '" target="_blank">' . $show . '</a>';
+                        $resultat = $resultat . '<hr /><a href="/' . $url . '" target="_blank">' . $show . '</a>';
                     }
                 }
             }
@@ -101,7 +111,7 @@ $router->get('/recherche', function () {
 
     // Affiche aucun résultat si rien de correspond ou affiche la valeur trouvée
     if ($resultat == "") {
-        $reponse = "Aucun résultat";
+        $reponse = '<span class="italic font-semibold text-red-400">Aucun résultat</span>';
     } else {
         $reponse = $resultat;
     }
@@ -238,7 +248,7 @@ $router->post('/visites-en-attente', function () {
         $type_id = $con->runRawQuery('SELECT type_id FROM visites WHERE id = :id', ['id' => $id]);
 
         foreach ($type_id[0] as $test) {
-            if ($test == null) {
+            if ($test == null && $_POST['statut'] == 'validée') {
                 echo "<script>alert('Vous n\'avez pas validé l\'identité du visiteur !'); window.location = '/visites-en-attente'</script>";
             } else {
                 $sql = 'UPDATE visites SET statut = :statut WHERE id = :id';
@@ -247,14 +257,17 @@ $router->post('/visites-en-attente', function () {
                     'id' => $id,
                 ];
                 $con->runRawQuery($sql, $args, true);
-    
-                if ($_POST['statut'] == 'expirée') {
-                    // Faire un if tableau vide rediriger else actualiser
-                    header('Location: /visites-expirees');
-                } elseif ($_POST['statut'] == 'en attente') {
-                    header('Location: /visites-en-attente');
-                } elseif ($_POST['statut'] == 'validée') {
-                    header('Location: /visites-validees');
+
+                switch ($_POST['statut']) {
+                    case "expirée":
+                        header('Location: /visites-expirees');
+                        break;
+                    case "en attente":
+                        header('Location: /visites-en-attente');
+                        break;
+                    case "validée":
+                        header('Location: /visites-validees');
+                        break;
                 }
             }
         }
@@ -287,13 +300,23 @@ $router->post('/visites-en-attente', function () {
         $con->runRawQuery($sql, $args, true);
 
         header('Location: /visites-en-attente');
-    } elseif ($_POST['num_id']) {
+    } elseif (isset($_POST['num_id'])) {
         $num_id = $_POST['num_id'];
         $id = $_POST['id'];
 
         $sql = 'UPDATE visites SET num_id = :num_id WHERE id = :id';
         $args = [
             'num_id' => $num_id,
+            'id' => $id,
+        ];
+        $con->runRawQuery($sql, $args, true);
+
+        header('Location: /visites-en-attente');
+    } elseif (isset($_POST['delete'])) {
+        $id = $_POST['id'];
+
+        $sql = 'DELETE FROM visites WHERE id = :id';
+        $args = [
             'id' => $id,
         ];
         $con->runRawQuery($sql, $args, true);
@@ -310,21 +333,33 @@ $router->post('/visites-expirees', function () {
         $statut = $_POST['statut'];
         $id = $_POST['id'];
 
-        $sql = 'UPDATE visites SET statut = :statut WHERE id = :id';
-        $args = [
-            'statut' => $statut,
-            'id' => $id,
-        ];
-        $con->runRawQuery($sql, $args, true);
+        $type_id = $con->runRawQuery('SELECT type_id FROM visites WHERE id = :id', ['id' => $id]);
 
-        if ($_POST['statut'] == 'expirée') {
-            // Faire un if tableau vide rediriger else actualiser
-            header('Location: /visites-expirees');
-        } elseif ($_POST['statut'] == 'en attente') {
-            header('Location: /visites-en-attente');
-        } elseif ($_POST['statut'] == 'validée') {
-            header('Location: /visites-validees');
+        foreach ($type_id[0] as $test) {
+            if ($test == null && $_POST['statut'] == 'validée') {
+                echo "<script>alert('Vous n\'avez pas validé l\'identité du visiteur !'); window.location = '/visites-expirees'</script>";
+            } else {
+                $sql = 'UPDATE visites SET statut = :statut WHERE id = :id';
+                $args = [
+                    'statut' => $statut,
+                    'id' => $id,
+                ];
+                $con->runRawQuery($sql, $args, true);
+    
+                switch ($_POST['statut']) {
+                    case "expirée":
+                        header('Location: /visites-expirees');
+                        break;
+                    case "en attente":
+                        header('Location: /visites-en-attente');
+                        break;
+                    case "validée":
+                        header('Location: /visites-validees');
+                        break;
+                }
+            }
         }
+        
     }
 
     if (isset($_POST['num_id'])) {
@@ -337,10 +372,6 @@ $router->post('/visites-expirees', function () {
         ];
         $con->runRawQuery($sql, $args, true);
     }
-
-    /*if (isset($_POST['supprimer']) {
-        $sql = 'DELETE visites WHERE id = :id';
-    }*/
 });
 $router->post('/visites-validees', function () {
     exportCsv();
@@ -351,21 +382,33 @@ $router->post('/visites-validees', function () {
         $statut = $_POST['statut'];
         $id = $_POST['id'];
 
-        $sql = 'UPDATE visites SET statut = :statut WHERE id = :id';
-        $args = [
-            'statut' => $statut,
-            'id' => $id,
-        ];
-        $con->runRawQuery($sql, $args, true);
+        $type_id = $con->runRawQuery('SELECT type_id FROM visites WHERE id = :id', ['id' => $id]);
 
-        if ($_POST['statut'] == 'expirée') {
-            // Faire un if tableau vide rediriger else actualiser
-            header('Location: /visites-expirees');
-        } elseif ($_POST['statut'] == 'en attente') {
-            header('Location: /visites-en-attente');
-        } elseif ($_POST['statut'] == 'validée') {
-            header('Location: /visites-validees');
+        foreach ($type_id[0] as $test) {
+            if ($test == null && $_POST['statut'] == 'validée') {
+                echo "<script>alert('Vous n\'avez pas validé l\'identité du visiteur !'); window.location = '/visites-validees'</script>";
+            } else {
+                $sql = 'UPDATE visites SET statut = :statut WHERE id = :id';
+                $args = [
+                    'statut' => $statut,
+                    'id' => $id,
+                ];
+                $con->runRawQuery($sql, $args, true);
+    
+                switch ($_POST['statut']) {
+                    case "expirée":
+                        header('Location: /visites-expirees');
+                        break;
+                    case "en attente":
+                        header('Location: /visites-en-attente');
+                        break;
+                    case "validée":
+                        header('Location: /visites-validees');
+                        break;
+                }
+            }
         }
+        
     }
 
     if (isset($_POST['num_id'])) {
