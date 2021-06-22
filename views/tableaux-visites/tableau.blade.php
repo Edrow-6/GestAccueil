@@ -1,7 +1,4 @@
 <table class="w-full table-auto min-w-max" id="liste_visites">
-    <?php
-//var_dump($result);
-?>
     <thead>
         <tr class="text-sm leading-normal text-gray-600 uppercase bg-gray-300">
             <th class="py-3 pl-2 pr-4 text-center select-none">Id.</th>

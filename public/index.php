@@ -79,10 +79,10 @@ $router->get('/recherche', function () {
 
     $res = $_GET["res"];
     $visites = $con->runRawQuery('SELECT * FROM visites');
+    $resultat = "";
 
     //lookup all links from the xml file if length of q>0
     if (strlen($res) > 0) {
-        $resultat = "";
         foreach ($visites as $visite) {
             $show = $visite['nom'] . " " . $visite['prenom'];
             switch ($visite['statut']) {
@@ -99,11 +99,7 @@ $router->get('/recherche', function () {
             if (isset($show)) {
                 // Trouver une correspondance avec la recherche
                 if (stristr($show, $res)) {
-                    if ($resultat == "") {
-                        $resultat = '<a href="' . $url . '" target="_blank">' . $show . '</a>';
-                    } else {
-                        $resultat = $resultat . '<hr /><a href="/' . $url . '" target="_blank">' . $show . '</a>';
-                    }
+                    $resultat = $resultat . '<a href="/' . $url . '">' . $show . '</a>';
                 }
             }
         }
