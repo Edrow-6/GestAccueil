@@ -4,9 +4,10 @@
 
 <title>{{ $titre . $app }}</title>
 
-<link href="favicon-32x32.png" rel="icon" />
+<link href="images/favicon-32x32.png" rel="icon" />
 <link href="css/compiled.css" rel="stylesheet" />
 <link href="css/all.min.css" rel="stylesheet" />
+<link href="css/styles.css" rel="stylesheet" />
 
 <script src="https://unpkg.com/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
 <script src="https://unpkg.com/tippy.js@6.3.1/dist/tippy-bundle.umd.min.js"></script>

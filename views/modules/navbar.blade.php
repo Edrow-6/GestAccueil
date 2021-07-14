@@ -14,7 +14,7 @@
             onkeyup="showResult(this.value)"
         />
         {{-- DIV DE LA BARRE DE RECHERCHE --}}
-        <div class="absolute text-center rounded-lg shadow-lg bg-gray-50 mt-11 w-60">
+        <div id="hide" class="absolute z-10 text-center rounded-lg shadow-lg bg-gray-50 mt-11 w-60">
             <div class="flex flex-col py-2" id="recherche"></div>
         </div>
     </div>

@@ -6,9 +6,9 @@ use eftec\ValidationOne;
 
 $root_dir = dirname(__DIR__);
 require $root_dir . '/vendor/autoload.php';
+require $root_dir . '/classes/Calendrier.php';
 
 $val = new ValidationOne(); // Library de validation
-
 
 // Initialisation du fichier d'environement .env
 $dotenv = Dotenv\Dotenv::createImmutable(dirname(__DIR__));
@@ -74,6 +74,16 @@ function exportCsv()
 }
 
 $router = new Router();
+$router->before('GET|POST', '/.*', function () {
+    if (!isset($_SESSION['service'])) {
+        header('Location: /auth');
+        exit();
+    }
+});
+$router->get('/auth', function () {
+    require dirname(__DIR__) . '/auth/auth2.php';
+});
+
 $router->get('/recherche', function () {
     $con = initDB();
 
@@ -126,7 +136,6 @@ $router->get('/', function () {
     $percent_expiree = ($expiree[0]['count(1)'] / $nb_visite) * 100;
     $percent_attente = ($attente[0]['count(1)'] / $nb_visite) * 100;
 
-    include 'Calendrier.php';
     $calendrier = new Calendrier();
     $visites = $con->runRawQuery('SELECT * FROM visites');
     $statuts = $con->runRawQuery('SELECT * FROM statuts');

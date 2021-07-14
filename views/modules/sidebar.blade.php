@@ -19,5 +19,6 @@
             <i class="mr-3 fas fa-address-card"></i>
             Visites
         </a>
+        <img class="fixed bottom-0 mb-2 ml-2 rounded-md shadow-lg" src="images/assurance_maladie.png" alt="Assurance Maladie">
     </div>
 </div>
